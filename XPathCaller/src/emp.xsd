@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema
+        xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="ns:emp"
+        xmlns:tns="ns:emp"
+        elementFormDefault="qualified">
+        <element name="content">
+                <complexType>
+                        <sequence>
+                                <element ref="tns:emp"/>
+                                <element ref="tns:dept"/>
+                                <element ref="tns:salgrade"/>
+                        </sequence>
+                </complexType>
+                <key name="empno-key">
+                        <selector xpath="tns:emp/tns:employee"/>
+                        <field xpath="@empno"/>
+                </key>
+                <keyref name="mgr-ref" refer="tns:empno-key">
+                        <selector xpath="tns:emp/tns:employee"/>
+                        <field xpath="@mgr"/>
+                </keyref>
+                <key name="deptno-key">
+                        <selector xpath="tns:dept/tns:department"/>
+                        <field xpath="@deptno"/>
+                </key>
+                <keyref name="deptno-ref" refer="tns:deptno-key">
+                        <selector xpath="tns:emp/tns:employee"/>
+                        <field xpath="@deptno"/>
+                </keyref>
+        </element>
+        <element name="emp">
+                <complexType>
+                        <sequence>
+                                <element name="employee" minOccurs="0" maxOccurs="unbounded">
+                                        <complexType>
+                                                <sequence>
+                                                        <element name="ename" type="string"/>
+                                                        <element name="job" type="string"/>
+                                                        <element name="hiredate" type="date"/>
+                                                        <element name="sal" type="decimal"/>
+                                                        <element name="comm" type="decimal"/>
+                                                </sequence>
+                                                <attribute name="empno" type="positiveInteger" use="required"/>
+                                                <attribute name="mgr" type="positiveInteger"/>
+                                                <attribute name="deptno" type="positiveInteger" use="required"/>
+                                        </complexType>
+                                </element>
+                        </sequence>
+                </complexType>
+        </element>
+        <element name="dept">
+                <complexType>
+                        <sequence>
+                                <element name="department" minOccurs="0" maxOccurs="unbounded">
+                                        <complexType>
+                                                <sequence>
+                                                        <element name="dname" type="string"/>
+                                                        <element name="loc" type="string"/>
+                                                </sequence>
+                                                <attribute name="deptno" type="positiveInteger" use="required"/>
+                                        </complexType>
+                                </element>
+                        </sequence>
+                </complexType>
+        </element>
+        <element name="salgrade">
+                <complexType>
+                        <sequence>
+                                <element name="sal" minOccurs="0" maxOccurs="unbounded">
+                                        <complexType>
+                                                <sequence>
+                                                        <element name="losal" type="string"/>
+                                                        <element name="hisal" type="string"/>
+                                                </sequence>
+                                                <attribute name="grade" type="positiveInteger" use="required"/>
+                                        </complexType>
+                                </element>
+                        </sequence>
+                </complexType>
+                <unique name="grade">
+                        <selector xpath="tns:sal"/>
+                        <field xpath="@grade"/>
+                </unique>
+        </element>
+</schema>
